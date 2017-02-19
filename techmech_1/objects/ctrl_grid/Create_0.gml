@@ -20,12 +20,38 @@ for (xx = 0; xx < grid_width;xx+=1)
 		}
 	}
 	
+//make all walls obstacles
+
+mp_grid_add_instances(grid,obj_wall,false)
+	
+
 //Initialize states
+
 state = "command"
 
 //Initialize variables
 
 current_unit = noone
+grid_updated = false
+mouse_xx_check = 0
+mouse_yy_check = 0
+turn_count = 1
+team = 2
+phase_begin = true
+wait_count = 0
+action_complete = false
+draw_set_font(fnt_menu)
+temp_x = 0
+temp_y = 0
+
+//Initialize team list
+
+team1 = ds_list_create()
+team2 = ds_list_create()
+
+
+
+
 
 
 
