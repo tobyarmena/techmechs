@@ -1,3 +1,34 @@
+//draw_text(x+32,y,string(direction))
+
+//draw sprite
+
+if state == "wait"
+	{
+	draw_sprite_stretched_ext(sprite_index,image_index,x-16,y-16,sprite_width,sprite_height,c_gray,1)
+	}
+else
+	{
+	if state == "moving"
+		{
+		
+		image_speed = 6
+		var sprite = sprite_run_right
+		if direction == 90 
+			sprite = sprite_run_up
+		else if direction == 180
+			sprite = sprite_run_left
+		else if direction == 270
+			sprite = sprite_run_down
+		else if direction == 0 || direction == 360
+			sprite = sprite_run_right
+		draw_sprite_stretched_ext(sprite,image_index,x-16,y-16,sprite_width,sprite_height,c_white,1)
+		}
+	else
+		{
+		image_speed = 3
+		draw_sprite_stretched_ext(sprite_index,image_index,x-16,y-16,sprite_width,sprite_height,c_white,1)
+		}
+	}
 
 
 //displaye state

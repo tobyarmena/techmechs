@@ -1,7 +1,7 @@
 {
     "id": "b4275097-2e8f-4f2a-b27d-fa9174a9c682",
     "modelName": "GMSprite",
-    "mvc": "1.0",
+    "mvc": "1.12",
     "name": "spr_attackable_position",
     "For3D": false,
     "HTile": false,

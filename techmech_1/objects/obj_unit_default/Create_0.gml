@@ -6,6 +6,14 @@ sprite_set_offset(sprite_index,16,16)
 x+=16
 y+=16
 
+//Set sprites
+
+sprite_idle = spr_unit_default
+sprite_run_right = spr_unit_default_run_right
+sprite_run_left = spr_unit_default_run_left
+sprite_run_up = spr_unit_default_run_up
+sprite_run_down = spr_unit_default_run_down
+
 //Set variables
 
 path = path_add()
