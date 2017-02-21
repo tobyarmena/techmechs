@@ -23,6 +23,9 @@ for (xx = 0; xx < grid_width;xx+=1)
 //make all walls obstacles
 
 mp_grid_add_instances(grid,obj_wall,false)
+mp_grid_add_instances(grid, obj_path_wall, false);
+//with(obj_path_wall)
+	//instance_deactivate_object(obj_path_wall)
 	
 
 //Initialize states
@@ -43,6 +46,9 @@ action_complete = false
 draw_set_font(fnt_menu)
 temp_x = 0
 temp_y = 0
+parent = noone
+inst_check = noone
+
 
 //Initialize team list
 

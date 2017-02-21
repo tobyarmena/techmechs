@@ -33,7 +33,9 @@ with(argument0)
 		//Update position for self
 	
 		xpos = argument1
+		x2pos = argument1+1
 		ypos = argument2
+		y2pos = argument2+1
 			
 		}
 	}
