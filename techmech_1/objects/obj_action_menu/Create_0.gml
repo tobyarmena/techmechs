@@ -16,23 +16,14 @@ with(ctrl_grid)
 		{
 		for(yy = 0 ; yy < grid_height ; yy += 1)
 			{
-			if state == "unitchosen"
+			if grid_hit[xx,yy] == 1
 				{
-				if ((abs(current_unit.xpos-xx) + abs(current_unit.ypos-yy)) <= current_unit.attack_range_max) 
+				if grid_occ[xx,yy] != noone
 					{
-					if ((abs(current_unit.xpos-xx) + abs(current_unit.ypos-yy)) >= current_unit.attack_range_min) 
+					with(other)
 						{
-						if grid_occ[xx,yy] != noone
-							{
-							if grid_occ[xx,yy].team != current_unit.team
-								{
-								with(other)
-									{
-									option[1,0] = "attack"
-									option[1,1] = scr_attack
-									}
-								}
-							}
+						option[1,0] = "attack"
+						option[1,1] = scr_attack
 						}
 					}
 				}

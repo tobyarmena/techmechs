@@ -17,6 +17,7 @@ for (xx = 0; xx < grid_width;xx+=1)
 		grid_occ[xx,yy] = noone
 		grid_ter[xx,yy] = ""
 		grid_mov[xx,yy] = 0
+		grid_hit[xx,yy] = 0
 		}
 	}
 	

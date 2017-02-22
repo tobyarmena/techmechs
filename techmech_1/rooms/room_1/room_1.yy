@@ -104,8 +104,8 @@
                     "m_originalParentID": "00000000-0000-0000-0000-000000000000",
                     "m_serialiseFrozen": false,
                     "name": "inst_3FF21BD3",
-                    "x": 576,
-                    "y": 352,
+                    "x": 384,
+                    "y": 384,
                     "IsDnD": false,
                     "colour": {
                         "Value": 4294967295
@@ -152,8 +152,8 @@
                     "m_originalParentID": "00000000-0000-0000-0000-000000000000",
                     "m_serialiseFrozen": false,
                     "name": "inst_1157CD9",
-                    "x": 480,
-                    "y": 320,
+                    "x": 288,
+                    "y": 480,
                     "IsDnD": false,
                     "colour": {
                         "Value": 4294967295
@@ -176,8 +176,8 @@
                     "m_originalParentID": "00000000-0000-0000-0000-000000000000",
                     "m_serialiseFrozen": false,
                     "name": "inst_665702EF",
-                    "x": 704,
-                    "y": 544,
+                    "x": 640,
+                    "y": 384,
                     "IsDnD": false,
                     "colour": {
                         "Value": 4294967295
@@ -200,8 +200,8 @@
                     "m_originalParentID": "00000000-0000-0000-0000-000000000000",
                     "m_serialiseFrozen": false,
                     "name": "inst_BFB86AA",
-                    "x": 800,
-                    "y": 512,
+                    "x": 704,
+                    "y": 352,
                     "IsDnD": false,
                     "colour": {
                         "Value": 4294967295
@@ -224,8 +224,8 @@
                     "m_originalParentID": "00000000-0000-0000-0000-000000000000",
                     "m_serialiseFrozen": false,
                     "name": "inst_7EAF131F",
-                    "x": 736,
-                    "y": 448,
+                    "x": 640,
+                    "y": 320,
                     "IsDnD": false,
                     "colour": {
                         "Value": 4294967295

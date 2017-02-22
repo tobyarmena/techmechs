@@ -17,14 +17,12 @@ if state == "unitchosen"
 		
 		if mouse_xxx == current_unit.xpos && mouse_yyy == current_unit.ypos
 			{
-			for (xx = 0 ; xx <= grid_width ; xx++)
-				for (yy = 0 ; yy <=  grid_height ; yy++)
-					grid_mov[xx,yy] = 0
+			scr_update_map()
+			
+			scr_update_hit_grid()
 			with(current_unit)
 				{
 				//empty movable position grid
-		
-				
 				path_position = 0 
 				state = "action"
 				other.grid_updated = false
@@ -40,7 +38,10 @@ if state == "unitchosen"
 		
 			for (xx = 0 ; xx <= grid_width ; xx++)
 				for (yy = 0 ; yy <=  grid_height ; yy++)
+					{
 					grid_mov[xx,yy] = 0
+					grid_hit[xx,yy] = 0
+					}
 			}
 		}
 		
@@ -56,6 +57,7 @@ if state == "unitchosen"
 				state = "action"
 				other.grid_updated = false
 				other.action_complete = true
+				scr_update_hit_grid()
 				}
 		}
 		
@@ -80,24 +82,21 @@ if state == "unitchosen"
 			}
 		if mouse_check_button_pressed(mb_left)
 			{
-			var mouse_xx = floor(mouse_x/grid_size)
-			var mouse_yy = floor(mouse_y/grid_size)
-			if ((abs(current_unit.xpos-mouse_xxx) + abs(current_unit.ypos-mouse_yyy)) <= current_unit.attack_range_max) 
+			if grid_hit[mouse_xxx,mouse_yyy]
 				{
-				if ((abs(current_unit.xpos-mouse_xxx) + abs(current_unit.ypos-mouse_yyy)) >= current_unit.attack_range_min) 
+				if grid_occ[mouse_xxx,mouse_yyy] != noone
 					{
-					if grid_occ[mouse_xxx,mouse_yyy] != noone
+					var target = grid_occ[mouse_xxx,mouse_yyy]
+					if target.team != current_unit.team
 						{
-						if grid_occ[mouse_xxx,mouse_yyy].team != current_unit.team
-							{
-							grid_occ[mouse_xxx,mouse_yyy].hp -= 10
-							current_unit.state = "wait"
-							state = "command"
-							current_unit = noone
-							grid_updated = false
-							action_complete = true
-							exit;
-							}
+						target.hp -= 10
+						grid_occ[mouse_xxx,mouse_yyy].hp -= 10
+						current_unit.state = "wait"
+						state = "command"
+						current_unit = noone
+						grid_updated = false
+						action_complete = true
+						exit;
 						}
 					}
 				}
@@ -143,9 +142,9 @@ if state == "ridechosen"
 		if mouse_xxx == current_unit.xpos && mouse_yyy == current_unit.ypos
 			{
 			//empty movable position grid
-			for (xx = 0 ; xx <= grid_width ; xx++)
-				for (yy = 0 ; yy <=  grid_height ; yy++)
-					grid_mov[xx,yy] = 0
+			scr_update_map()
+			
+			scr_update_hit_grid()
 			with(current_unit)
 				{
 				path_position = 0 
@@ -163,7 +162,10 @@ if state == "ridechosen"
 			//empty movable position grid
 			for (xx = 0 ; xx <= grid_width ; xx++)
 				for (yy = 0 ; yy <=  grid_height ; yy++)
+					{
 					grid_mov[xx,yy] = 0
+					grid_hit[xx,yy] = 0
+					}
 			}
 		}
 		
@@ -177,6 +179,7 @@ if state == "ridechosen"
 				state = "action"
 				other.grid_updated = false
 				other.action_complete = true
+				scr_update_hit_grid()
 				}
 		}
 		
@@ -189,6 +192,37 @@ if state == "ridechosen"
 			instance_create_layer(current_unit.x-64,current_unit.y-16,"Instances",obj_action_menu)
 			
 			}
+		}
+		
+	//Attacking
+	if current_unit.state = "attacking"
+		{
+		if mouse_check_button_pressed(mb_right)
+			{
+			current_unit.state = "action"
+			}
+		if mouse_check_button_pressed(mb_left)
+			{
+			
+			if grid_hit[mouse_xxx,mouse_yyy] == 1
+				{
+				if grid_occ[mouse_xxx,mouse_yyy] != noone
+					{
+					var target = grid_occ[mouse_xxx,mouse_yyy]
+					if target.team != current_unit.team
+						{
+						target.hp -= 10
+						grid_occ[mouse_xxx,mouse_yyy].hp -= 10
+						current_unit.state = "wait"
+						state = "command"
+						current_unit = noone
+						grid_updated = false
+						action_complete = true
+						exit;
+						}
+					}
+				}
+			} 
 		}
 		
 	//Cancel move
@@ -272,7 +306,19 @@ if state == "command"
 							if mp_grid_path(other.grid,path,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false)
 								{
 								if path_get_length(path)/ctrl_grid.grid_size <= move_range
+									{
 									other.grid_mov[xx,yy] = 1
+									//Set hittable positions
+										for (xxx = xx-attack_range_max;xxx <= xx+attack_range_max;xxx++)
+											for (yyy = yy-attack_range_max;yyy <= yy+attack_range_max;yyy++)
+												{
+												if abs(xxx-xx)+ abs(yyy-yy) <= attack_range_max
+													if abs(xxx-xx)+ abs(yyy-yy) >= attack_range_min
+														{
+														other.grid_hit[xxx,yyy] = 1
+														}
+												}
+									}
 								}
 							}
 						}
@@ -322,6 +368,19 @@ if state == "command"
 											if path_get_length(path4)/ctrl_grid.grid_size <= move_range
 												{
 												other.grid_mov[xx,yy] = 1
+												
+												//Set hittable positions
+													for (xp = xx; xp <= xx+1;xp++)
+														for (yp = yy; yp <= yy+1;yp++)
+															for (xxx = xp-attack_range_max;xxx <= xp+attack_range_max;xxx++)
+																for (yyy = yp-attack_range_max;yyy <= yp+attack_range_max;yyy++)
+																	{
+																	if abs(xxx-xp)+ abs(yyy-yp) <= attack_range_max
+																		if abs(xxx-xp)+ abs(yyy-yp) >= attack_range_min
+																			{
+																			other.grid_hit[xxx,yyy] = 1
+																			}
+																	}
 												}
 											}
 										}
@@ -330,6 +389,7 @@ if state == "command"
 								scr_grid_refresh()
 							}
 					}
+				
 				}
 		
 			if mouse_check_button_pressed(mb_left)
@@ -347,7 +407,7 @@ if state == "command"
 					temp_x = current_unit.x
 					temp_y = current_unit.y
 					
-					//Set movable positions for unit
+					//Set movable and hittable positions positions for unit
 					scr_update_map()
 					with(current_unit)
 						{
@@ -359,10 +419,27 @@ if state == "command"
 								if mp_grid_path(other.grid,path,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false)
 									{
 									if path_get_length(path)/ctrl_grid.grid_size <= move_range
+										{
 										other.grid_mov[xx,yy] = 1
+										
+										//Set hittable positions
+										for (xxx = xx-attack_range_max;xxx <= xx+attack_range_max;xxx++)
+											for (yyy = yy-attack_range_max;yyy <= yy+attack_range_max;yyy++)
+												{
+												if abs(xxx-xx)+ abs(yyy-yy) <= attack_range_max
+													if abs(xxx-xx)+ abs(yyy-yy) >= attack_range_min
+														{
+														other.grid_hit[xxx,yyy] = 1
+														}
+												}
+										
+										
+										}
 									}
 								}
 						}
+					
+					
 					}
 				//what happens when you press a ride
 				else if grid_occ[mouse_xxx,mouse_yyy].state == "ready" && parent == par_ride
@@ -417,6 +494,19 @@ if state == "command"
 												if path_get_length(path4)/ctrl_grid.grid_size <= move_range
 													{
 													other.grid_mov[xx,yy] = 1
+													
+													//Set hittable positions
+													for (xp = xx; xp <= xx+1;xp++)
+														for (yp = yy; yp <= yy+1;yp++)
+															for (xxx = xp-attack_range_max;xxx <= xp+attack_range_max;xxx++)
+																for (yyy = yp-attack_range_max;yyy <= yp+attack_range_max;yyy++)
+																	{
+																	if abs(xxx-xp)+ abs(yyy-yp) <= attack_range_max
+																		if abs(xxx-xp)+ abs(yyy-yp) >= attack_range_min
+																			{
+																			other.grid_hit[xxx,yyy] = 1
+																			}
+																	}
 													}
 												}
 											}
@@ -436,7 +526,10 @@ if state == "command"
 		
 			for (xx = 0 ; xx <= grid_width ; xx++)
 				for (yy = 0 ; yy <=  grid_height ; yy++)
+					{
 					grid_mov[xx,yy] = 0
+					grid_hit[xx,yy] = 0
+					}
 			}
 		}
 	

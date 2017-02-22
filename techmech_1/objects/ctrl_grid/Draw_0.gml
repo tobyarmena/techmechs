@@ -29,31 +29,51 @@ for(xx = 0 ; xx < grid_width ; xx += 1)
 				}
 				
 			}
+		//Draw hittable positions
+		else if grid_hit[xx,yy] == 1
+			{
+			if state == "command"
+				draw_set_alpha(0.15)
+			else if state == "unitchosen" || state == "ridechosen"
+				draw_set_alpha(0.3)
+			if state == "command"
+				{
+				if parent == par_unit
+					draw_sprite(spr_attackable_position,0,xx*grid_size,yy*grid_size)
+				else if parent == par_ride
+					if grid_mov[xx-1,yy-1] != 1
+						if grid_mov[xx-1,yy] != 1
+							if grid_mov[xx,yy-1] != 1
+								draw_sprite(spr_attackable_position,0,xx*grid_size,yy*grid_size)
+				}
+			else if state == "unitchosen" 
+				{
+				if current_unit.state == "ready" || current_unit.state == "attacking"
+					draw_sprite(spr_attackable_position,0,xx*grid_size,yy*grid_size)
+				}
+			else if state == "ridechosen"
+				{
+				if current_unit.state == "ready" || current_unit.state == "attacking"
+					{
+					if grid_mov[xx-1,yy-1] != 1
+						if grid_mov[xx-1,yy] != 1
+							if grid_mov[xx,yy-1] != 1
+								draw_sprite(spr_attackable_position,0,xx*grid_size,yy*grid_size)
+					}
+				}
+			}
+			
+		
+		//DEBUG GRID
 		draw_set_alpha(0.3)
 		draw_sprite(spr_grid,0,xx*grid_size,yy*grid_size)
 		draw_set_font(fnt_debug)
-		draw_text(xx*grid_size,yy*grid_size,string(grid_occ[xx,yy]))
+		draw_text(xx*grid_size,yy*grid_size,string(grid_hit[xx,yy]))
 		draw_text(xx*grid_size,yy*grid_size+6,string(grid_mov[xx,yy]))
 		draw_set_font(fnt_menu)
 		draw_text(0,0,state)
 		draw_set_alpha(1)
 		
-		if state == "unitchosen"
-			{
-			if current_unit.state == "attacking"
-				{
-				if ((abs(current_unit.xpos-xx) + abs(current_unit.ypos-yy)) <= current_unit.attack_range_max) 
-					{
-					if ((abs(current_unit.xpos-xx) + abs(current_unit.ypos-yy)) >= current_unit.attack_range_min) 
-						{
-						draw_set_alpha(0.3)
-						draw_sprite(spr_attackable_position,0,xx*grid_size,yy*grid_size)
-						draw_set_alpha(1)
-						
-						}
-					}
-				}
-			}
 		
 		}
 	}
